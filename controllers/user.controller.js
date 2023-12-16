@@ -84,12 +84,26 @@ const getUserProfile = async (req, res, next) => {
 
 const getUsers = async (req, res, next) => {
     try {
-        const users = await userModel.find({
-            isDeleted: false,
-        }).lean();
+        const { page = 1, pageSize = 10 } = req.query;
 
-        if (users.length <= 0)
-            throw httpErrors.NotFound(`No user found.`);
+        const parsedPage = parseInt(page, 10);
+        const parsedPageSize = parseInt(pageSize, 10);
+
+        if (isNaN(parsedPage) || isNaN(parsedPageSize) || parsedPage < 1 || parsedPageSize < 1) {
+            throw httpErrors[400]('Invalid page or pageSize parameters');
+        }
+
+        // Calculate the number of posts to skip based on the page and pageSize
+        const skip = (parsedPage - 1) * parsedPageSize;
+
+        // Query to retrieve users with pagination
+        const users = await userModel
+            .find({ isDeleted: false })
+            .skip(skip)
+            .limit(parsedPageSize)
+            .sort({ _id: -1 }) // Sort in descending order based on _id (or your preferred sorting)
+            .lean()
+
 
         await Promise.all(
             users.map(async (user) => {
@@ -103,7 +117,7 @@ const getUsers = async (req, res, next) => {
                 error: false,
                 data: {
                     users: users,
-                    message: "User profile fetched successfully",
+                    message: "Users fetched successfully",
                 },
             });
         }

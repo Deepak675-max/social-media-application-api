@@ -64,7 +64,7 @@ const getUserPosts = async (req, res, next) => {
         // Calculate the number of posts to skip based on the page and pageSize
         const skip = (parsedPage - 1) * parsedPageSize;
 
-        // Query to retrieve posts for the specified post with pagination
+        // Query to retrieve posts for the specified user with pagination
         const userPosts = await userPostModel
             .find({ userId: userDetails.userId, isDeleted: false })
             .skip(skip)
