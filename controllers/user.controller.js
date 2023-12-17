@@ -30,7 +30,7 @@ const createUserProfile = async (req, res, next) => {
         const userProfile = await newProfile.save();
 
         if (res.headersSent === false) {
-            res.status(200).send({
+            res.status(201).send({
                 error: false,
                 data: {
                     userProfile: userProfile,

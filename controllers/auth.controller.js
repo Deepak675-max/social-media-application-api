@@ -23,7 +23,7 @@ const signupUser = async (req, res, next) => {
         const user = await newUser.save();
 
         if (res.headersSent === false) {
-            res.status(200).send({
+            res.status(201).send({
                 error: false,
                 data: {
                     user: user,

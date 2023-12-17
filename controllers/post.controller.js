@@ -24,7 +24,7 @@ const createUserPost = async (req, res, next) => {
         const userPost = await newPost.save();
 
         if (res.headersSent === false) {
-            res.status(200).send({
+            res.status(201).send({
                 error: false,
                 data: {
                     userPost: userPost,

@@ -22,7 +22,7 @@ const addComment = async (req, res, next) => {
         await newComment.save();
 
         if (res.headersSent === false) {
-            res.status(200).send({
+            res.status(201).send({
                 error: false,
                 data: {
                     newComment: newComment,
